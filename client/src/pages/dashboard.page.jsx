@@ -14,13 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../actions/orders.actions';
 import OrderCard from '../components/orderCard.component';
 import Masonry from '@mui/lab/Masonry';
+import io from 'socket.io-client';
+
 const Dashboard = () => {
 	const dispatch = useDispatch();
 	const orders = useSelector(state => state.orders);
+	const socket = io();
 	useEffect(() => {
 		document.title = 'OBSD | Dashboard';
 		dispatch(getOrders());
-	}, []);
+	}, [orders]);
 
 	const pendingOrders = orders.filter(order => order.pending);
 	const completedOrders = orders.filter(order => !order.pending);
@@ -28,14 +31,13 @@ const Dashboard = () => {
 	const path = location.pathname;
 	const splittedPath = path.split('/');
 
-	console.log(path.split('/'));
 	useEffect(() => {
 		console.log(orders);
 	}, [orders]);
-
-	const stopwatchOffset = new Date(); 
-    stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + 300);
-
+	
+	socket.on('order sent', order => {
+		dispatch(getOrders());
+	});
 	return (
 		<Grid container style={{ minHeight: '90vh' }}>
 			<Grid item>
@@ -105,14 +107,14 @@ const Dashboard = () => {
 						? orders
 								.filter(order => order.pending)
 								.map(order => (
-									<Grid item key={order.id}>
+									<Grid item key={order._id}>
 										<OrderCard {...order} />
 									</Grid>
 								))
 						: orders
 								.filter(order => !order.pending)
 								.map(order => (
-									<Grid item key={order.id}>
+									<Grid item key={order._id}>
 										<OrderCard {...order} />
 									</Grid>
 								))}

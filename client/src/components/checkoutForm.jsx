@@ -8,10 +8,12 @@ import { resetCart } from '../actions/menuItems.actions';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import io from 'socket.io-client';
 
 const CheckoutForm = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const socket = io();
 	const cartItems = useSelector(state =>
 		state.menuItems.filter(item => item.orderQty > 0)
 	);
@@ -26,19 +28,22 @@ const CheckoutForm = () => {
 		onSubmit: values => {
 			dispatch(
 				addOrder({
-					id: Date.now(),
 					userDetails: { ...values },
 					pending: true,
 					orderItems: cartItems,
-					orderedAt: Date.now(),
 				})
 			);
+			socket.emit('order sent', {
+				userDetails: { ...values },
+				pending: true,
+				orderItems: cartItems,
+			});
 			formik.resetForm();
 			setOpenAlert(true);
 			setTimeout(() => {
 				dispatch(resetCart());
-		}, 3000);
-	},
+			}, 3000);
+		},
 		validationSchema: Yup.object({
 			name: Yup.string().required('Name is required').max(15, 'limit passed'),
 			address: Yup.string().required('Address is required'),

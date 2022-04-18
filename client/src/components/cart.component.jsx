@@ -74,7 +74,7 @@ const Cart = () => {
 						<DialogContent>
 							<Grid container>
 								{cartItems.map((item, idx) => (
-									<ItemCard key={item.id} {...item} parent='cart' />
+									<ItemCard key={item._id} {...item} parent='cart' />
 								))}
 							</Grid>
 							<Divider />

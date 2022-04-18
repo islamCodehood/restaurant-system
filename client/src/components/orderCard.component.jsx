@@ -1,18 +1,17 @@
 import {
 	Typography,
 	Divider,
-	Grid,
 	Paper,
 	Checkbox,
 	FormGroup,
 	FormControlLabel,
 } from '@mui/material';
-import { useTimer } from 'react-timer-hook';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeOrderStatus } from '../actions/orders.actions';
-import Timer from './timer';
-const OrderCard = ({ pending, orderItems, id, userDetails, orderedAt }) => {
+import moment from 'moment';
+
+const OrderCard = ({ pending, orderItems, _id, userDetails, createdAt }) => {
 	const [checked, setChecked] = useState({});
 	const [timerColor, setTimerColor] = useState('');
 	const dispatch = useDispatch();
@@ -20,31 +19,35 @@ const OrderCard = ({ pending, orderItems, id, userDetails, orderedAt }) => {
 		setChecked({ ...checked, [e.target.id.toString()]: e.target.checked });
 	};
 	useEffect(() => {
+		console.log(checked)
 		const checkedItems = Object.values(checked).filter(
 			checked => checked === true
 		);
 		if (checkedItems.length === orderItems.length) {
+			console.log(_id)
 			dispatch(
-				changeOrderStatus({ pending: false, orderItems, id, userDetails })
+				changeOrderStatus({ pending: false, orderItems, _id, userDetails, createdAt }, _id)
 			);
 		}
 	}, [checked]);
 
 	useEffect(() => {
+		setTimerColor('#ff9200')
 		let interval;
 		interval = setInterval(() => {
-			const now = new Date();
-			const diff = now - orderedAt;
-			if (diff < 60000) {
-				setTimerColor('green');
-			} else if (diff > 60000 && diff < 120000) {
-				setTimerColor('orange');
-			} else if (diff > 120000) {
-				setTimerColor('red');
-			}
+			const now = Date.now();
+			//console.log(createdAt)
+			const diff = now - createdAt;
+			//console.log(now, diff)
+			// if (diff < 60000) {
+			// 	setTimerColor('green');
+			// } else if (diff > 60000 && diff < 120000) {
+			// 	setTimerColor('orange');
+			// } else if (diff > 120000) {
+			// 	setTimerColor('red');
+			// }
 		}, 10);
 		
-		console.log(document.hidden)
 		return () => clearInterval(interval);
 	}, []);
 
@@ -52,26 +55,27 @@ const OrderCard = ({ pending, orderItems, id, userDetails, orderedAt }) => {
 		<Paper elevation={2} sx={{ width: '300px' }}>
 			<Typography
 				variant='body1'
+				component="div"
 				sx={{
 					textAlign: 'right',
 					padding: '8px',
 					background: !pending ? '#303030' : timerColor,
-					color: '#fff',
+					color: '#000',
 				}}
 			>
-				<Timer startAt={Date.now() - orderedAt} />
+				{moment().startOf('second').fromNow()}
 			</Typography>
 			<Divider />
 			<FormGroup sx={{ padding: '8px' }}>
 				{orderItems.map(item => (
 					<FormControlLabel
 						sx={{ textDecoration: !pending ? 'line-through' : '' }}
-						key={item.id}
+						key={item._id}
 						control={
 							<Checkbox
-								id={item.id}
+								id={item._id}
 								onChange={handleChange}
-								/* checked={!pending ? true : null} */ disabled={
+								disabled={
 									!pending ? true : false
 								}
 							/>

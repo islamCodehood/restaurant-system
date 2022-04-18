@@ -25,7 +25,7 @@ import {
 } from '../actions/menuItems.actions';
 
 const ItemCard = ({
-	id,
+	_id,
 	itemName,
 	ingredients,
 	price,
@@ -36,15 +36,15 @@ const ItemCard = ({
 }) => {
 	const dispatch = useDispatch();
 
-	const handleIncrementItem = () => {
-		dispatch(incrementItem(id));
+	const handleIncrementItem = () => {	
+		dispatch(incrementItem(_id));
 	};
 	const handleDecrementItem = () => {
-		dispatch(decrementItem(id));
+		dispatch(decrementItem(_id));
 	};
 
 	const handleDeleteItem = () => {
-		dispatch(deleteItem(id));
+		dispatch(deleteItem(_id));
 	};
 
 	return (

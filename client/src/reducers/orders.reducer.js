@@ -6,7 +6,7 @@ const reducer = (state = [], action) => {
 			return action.payload;
 		case 'CHANGE_ORDER_STATUS':
 			return state.map(order => {
-				if (order.id === action.payload.id) {
+				if (order._id === action.payload._id) {
 					return {...order, pending: false};
 				} else {
 					return order;

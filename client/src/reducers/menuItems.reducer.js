@@ -116,8 +116,9 @@ const reducer = (state = [], action) => {
 		case 'FETCH_ALL':
 			return action.payload;
 		case 'INCREMENT_ITEM':
+			console.log(state)
 			return state.map(item => {
-				if (item.id === action.payload.id) {
+				if (item._id === action.payload.id) {
 					return {
 						...item,
 						orderQty: item.orderQty + 1,
@@ -127,7 +128,7 @@ const reducer = (state = [], action) => {
 			});
 		case 'DECREMENT_ITEM':
 			return state.map(item => {
-				if (item.id === action.payload.id) {
+				if (item._id === action.payload.id) {
 					return {
 						...item,
 						orderQty: item.orderQty - 1,
@@ -137,7 +138,7 @@ const reducer = (state = [], action) => {
 			});
 		case 'DELETE_ITEM':
 			return state.map(item => {
-				if (item.id === action.payload.id) {
+				if (item._id === action.payload.id) {
 					return {
 						...item,
 						orderQty: 0,

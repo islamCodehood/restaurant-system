@@ -20,10 +20,10 @@ export const getOrders = () => async (dispatch) => {
 	}
 }
 
-export const changeOrderStatus = (updatedOrder) => async (dispatch) => {
+export const changeOrderStatus = (updatedOrder, id) => async (dispatch) => {
 	
 	try {
-		const { data } = await api.changeOrderStatus(updatedOrder);
+		const { data } = await api.changeOrderStatus(updatedOrder, id);
 		console.log(data);
 		dispatch({ type: 'CHANGE_ORDER_STATUS', payload: data });
 	} catch(err) {

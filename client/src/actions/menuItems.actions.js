@@ -3,6 +3,7 @@ import * as api from '../api';
 export const getMenuItems = () => async dispatch => {
 	try {
 		const { data } = await api.getMenuItems();
+		console.log(data)
 		dispatch({ type: 'FETCH_ALL', payload: data });
 	} catch (err) {
 		console.log(err);
@@ -10,6 +11,7 @@ export const getMenuItems = () => async dispatch => {
 };
 
 export const incrementItem = id => {
+	
 	return {
 		type: 'INCREMENT_ITEM',
 		payload: {

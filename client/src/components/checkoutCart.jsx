@@ -20,7 +20,7 @@ const CheckoutCart = () => {
 		<div style={{overflow: 'auto', height: '80vh'}}>
 			<Grid container direction='column'>
 				{cartItems.map((item, idx) => (
-					<ItemCard key={item.id} {...item} parent='cart' />
+					<ItemCard key={item._id} {...item} parent='cart' />
 				))}
 			</Grid>
 			<Divider />
